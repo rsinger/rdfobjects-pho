@@ -1,0 +1,15 @@
+RDFObjects/Pho integration.
+
+Interact with Talis Platform stores using RDFObjects objects.
+
+  Usage:
+  
+  >> require 'rdf_objects/pho'
+  >> store = RDFObject::Store.new('http://api.talis.com/store/storename', 'username', 'password')
+  >> response = store.describe('http://example.org/1')
+  
+  Responses have two new attributes:  collection and resource.  Collection will always be set, resource will only be set when applicable (describe, search, etc.)
+  
+  You can also pass RDFObject::Resource, RDFObject::BlankNode and RDFObject::Collection objects to Store#store_object, and Store#augment.  You can pass an RDFObject::ChangeSet to Store#submit_changeset.
+  
+   
