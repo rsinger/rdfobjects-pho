@@ -103,13 +103,18 @@ module RDFObject
         if field["http://schemas.talis.com/2006/bigfoot/configuration#analyzer"]
           index.set_analyzer(field["http://schemas.talis.com/2006/bigfoot/configuration#analyzer"].resource)
         end
+        index_set << index
       end
       
       [*qp["http://schemas.talis.com/2006/bigfoot/configuration#fieldWeight"]].each do |weight|
         next unless weight
         name = weight["http://schemas.talis.com/2006/frame/schema#name"].to_s
         index = index_set.get_index(name)
-        index.set_weight(weight["http://schemas.talis.com/2006/bigfoot/configuration#weight"])
+        unless index
+          puts "Warn:  discarding #{name} - does not appear in field/predicate map."
+          next
+        end
+        index.set_weight(weight["http://schemas.talis.com/2006/bigfoot/configuration#weight"].value)
       end
       return index_set
     end

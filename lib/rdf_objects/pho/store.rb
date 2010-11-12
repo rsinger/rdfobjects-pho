@@ -54,6 +54,8 @@ module RDFObject
     def set_indexes(index_set)
       index_set.set_store(@storeuri)
       put_field_predicate_map(index_set.to_fpmap)
+      put_query_profile(index_set.to_qp)
+      get_indexes
     end
     
     def get_job(uri)
@@ -78,7 +80,7 @@ module RDFObject
 
     def put_field_predicate_map(fpmap)
       if fpmap.is_a?(RDFObject::Resource)
-        rdf = fpmap.to_rdf_object.to_xml(4)
+        rdf = fpmap.to_xml(4)
       elsif fpmap.is_a?(String)
         rdf = fpmap
       end
@@ -89,7 +91,7 @@ module RDFObject
     
     def put_query_profile(qp)
       if qp.is_a?(RDFObject::Resource)
-        rdf = qp.to_rdf_object.to_xml(4)
+        rdf = qp.to_xml(4)
       elsif qp.is_a?(String)
         rdf = qp
       end      
