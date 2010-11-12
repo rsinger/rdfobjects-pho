@@ -94,7 +94,7 @@ module RDFObject
     end
     
     def self.new_from_response(fpmap, qp)
-      index_set = self.new(rdfo.uri.sub("/config/fpmaps/1",""))
+      index_set = self.new(fpmap.uri.sub("/config/fpmaps/1",""))
       [*fpmap["http://schemas.talis.com/2006/frame/schema#mappedDatatypeProperty"]].each do |field|
         next unless field
         index = RDFObject::Index.new
