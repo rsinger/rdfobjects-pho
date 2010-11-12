@@ -66,3 +66,40 @@ class RDFObject::Resource
     return true    
   end
 end
+
+class RDFObject::Collection
+  def to_rss
+    uuid = ::UUID.generate
+    uri = "info:uuid/#{uuid}"
+    namespaces = {}
+    rdf_data = ""    
+    self.values.each do |item|
+      ns, rss_data = item.rss_item_block
+      namespaces.merge!(ns)
+      rdf_data << rss_data      
+    end
+
+    unless namespaces["xmlns:rdf"]
+      if  x = namespaces.index("http://www.w3.org/1999/02/22-rdf-syntax-ns#")
+        namespaces.delete(x)
+      end
+      namespaces["xmlns:rdf"] = "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    end
+    namespaces["xmlns"] = "http://purl.org/rss/1.0/"
+    rdf = "<rdf:RDF"
+    namespaces.each_pair {|key, value| rdf << " #{key}=\"#{value}\""}
+    rdf <<">"
+    rdf << "<channel rdf:about=\"#{uri}\"><title>RDFObject Collection</title><link>#{uri}</link>"
+    rdf << "<description>RDFOject Collection</description><items><rdf:Seq>"
+    self.keys.each do |uri|
+      rdf << "<rdf:li resource=\"#{uri}\" />"
+    end
+    rdf << "</rdf:Seq></items>"
+    rdf << "</channel>"
+    
+      
+    rdf << rdf_data
+    rdf << "</rdf:RDF>"
+    rdf      
+  end  
+end
